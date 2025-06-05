@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Api\SensorController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+// Chat routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/send', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::post('/chat/clear', [ChatController::class, 'clearHistory'])->name('chat.clear');
+    Route::get('/chat/models', [ChatController::class, 'getModels'])->name('chat.models');
+});
 
 // API routes for sensor data
 Route::middleware('auth')->group(function () {
